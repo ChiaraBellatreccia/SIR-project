@@ -29,17 +29,14 @@ class Person {
   void Update(double beta, double gamma);  // Aggiorna lo stato della cellula a ogni generazione
 };
 
-class Grid {
+class Board {
  private:
  int rows_;
  int columns_;
  std::vector<std::vector<State>> grid_;
 
  public:
- Grid(int rows, int columns): rows_{rows}, columns_{columns} {
-   grid_.resize(rows, std::vector<State>(columns));
- } //costruttore
- State& operator()(int n_row, int n_column) const {return grid_[n_row][n_column];}; //overloading operatore() per accedere all'elemento ij
+ 
 
 };
 #endif
