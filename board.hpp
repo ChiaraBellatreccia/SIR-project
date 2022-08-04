@@ -31,12 +31,21 @@ class Person {
 
 class Board {
  private:
- int rows_;
- int columns_;
- std::vector<std::vector<State>> grid_;
+ const int rows_;
+ const int columns_;
+ const double beta_;
+ const double gamma_;
+ const int duration_; //durata totale della simulazione (in giorni)
+ std::vector<std::vector<Person>> people_; //griglia di persone
+ int totcounter[3]; //conta S, I ed R totali della griglia people_
+ int time = 0; //tiene il conto del numero di giorni della simulazione, parte da 0. Ogni giorno è una generazione.
 
  public:
- 
+ int GetTime() const; //ritorna il numero della generazione in cui si trova la simulazione
+ int SetTime(); //setta il contatore "time" aumentandolo di una unità a ogni generazione
+ void InitialState(); //genera lo stato iniziale della simulazione (riempie griglia e TotCounter con lo stato iniziale)
+ void TotUpdate(); //fa evolvere lo stato di ciascuna persona della griglia e riempie TotCounter con il numero di S, I, R
+ void Evolve(int time); //reitera TotUpdate tante volte quanto è time e a ogni iterazione aumenta "time" di una unità
 
 };
 #endif
