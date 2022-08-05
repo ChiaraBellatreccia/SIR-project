@@ -8,14 +8,15 @@
 
 State Person::GetState() const { return state_; };
 
-/*int* Person::Count() {
+void Person::SetState(State state) { state_ = state; };
+
+void Person::SetCounter() {
 
   counter[0] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Susceptible);
   counter[1] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Infected);
   counter[2] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Recovered);
 
-  return counter;
-  };*/
+  };
 
 void Person::Update(double beta, double gamma) { 
 
@@ -51,11 +52,11 @@ void Person::Update(double beta, double gamma) {
     
     };
 
-void Person::SetCounter(int S, int I, int R) { //Setta il counter di ciascuna person
+/*void Person::SetCounter(int S, int I, int R) { //Setta il counter di ciascuna person
     counter[0] = S;
     counter[1] = I;
     counter[2] = R;
-}
+}*/
 
 int Board::GetTime() const { return time; };
 
@@ -74,6 +75,63 @@ void Board::InitialState() {
     int column_0 = distr2(gen); //generazione colonna del paziente 0
 
 //riempimento griglia People con lo stato iniziale: tutti Susceptible tranne il paziente 0 che è Infected
+    people.resize(rows_, std::vector<Person>(columns_)); //resize della grid con tutte Person nello stato Susceptible (perché viene chiamato il costruttore di default)
+    people[row_0][column_0].SetState(State::Infected); //setta lo stato infected del paziente 0 in corrispondenza delle sue coordinate
 
+};
 
+void Board::SetAllCounters() {
+
+for(int i = 0; i != rows_; ++i) {
+   for(int j = 0; j != columns_; ++j)  {
+
+    //4 angoli 
+    if (i == 0 && j == 0) { //angolo in alto a sx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i+1][j].GetState(), people[i+1][j+1].GetState(), people[i][j+1].GetState() });
+      people[i][j].SetCounter();
+    }
+
+    else if (i == 0 && j == (columns_ - 1)) { //angolo in alto a dx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i][j-1].GetState(), people[i+1][j-1].GetState(), people[i+1][j].GetState() });
+      people[i][j].SetCounter();      
+    }
+
+    else if (i == (rows_ - 1) && j == (columns_ - 1)) { //angolo in basso a dx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i][j-1].GetState(), people[i-1][j-1].GetState(), people[i-1][j].GetState() });
+      people[i][j].SetCounter();      
+    }
+
+    else if (i == (rows_ - 1) && j == (columns_ - 1)) { //angolo in basso a sx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i-1][j].GetState(), people[i-1][j+1].GetState(), people[i][j+1].GetState() });
+      people[i][j].SetCounter();      
+    } 
+
+    //4 bordi
+    else if (i == 0 && 0 < j && j < (columns_ -1)) { //bordo in alto
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i][j-1].GetState(), people[i+1][j-1].GetState(), people[i+1][j].GetState(), people[i+1][j+1].GetState(), people[i][j+1].GetState() });
+      people[i][j].SetCounter();    
+    } 
+
+    else if (0 < i && i < (rows_ - 1) && j == (columns_ -1)) { //bordo a dx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i-1][j].GetState(), people[i-1][j-1].GetState(), people[i][j-1].GetState(), people[i+1][j-1].GetState(), people[i+1][j].GetState() });
+      people[i][j].SetCounter();    
+    } 
+
+    else if (i == (rows_ - 1) && 0 < j && j < (columns_ -1)) { //bordo in basso
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i][j+1].GetState(), people[i-1][j+1].GetState(), people[i-1][j].GetState(), people[i-1][j-1].GetState(), people[i][j-1].GetState() });
+      people[i][j].SetCounter();    
+    }
+
+    else if (0 < i && i < (rows_ - 1) && j == 0) { //bordo a sx
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i+1][j].GetState(), people[i+1][j+1].GetState(), people[i][j+1].GetState(), people[i-1][j+1].GetState(), people[i-1][j].GetState() });
+      people[i][j].SetCounter();    
+    }  
+
+    else { //tutte le altre posizioni
+      people[i][j].neighborhood_.insert((people[i][j].neighborhood_).end(), { people[i+1][j].GetState(), people[i+1][j+1].GetState(), people[i][j+1].GetState(), people[i-1][j+1].GetState(), people[i-1][j].GetState(), people[i-1][j-1].GetState(), people[i][j-1].GetState() });
+      people[i][j].SetCounter();
+    }
+   }
 }
+};
+
