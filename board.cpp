@@ -6,7 +6,7 @@
 #include <array>
 #include <algorithm>
 
-State Person::GetState() { return state_; };
+State Person::GetState() const { return state_; };
 
 int* Person::Count() {
 
@@ -50,3 +50,24 @@ void Person::Update(double beta, double gamma) {
     }  
     
     };
+
+int Board::GetTime() const { return time; };
+
+void Board::SetTime() { time += 1; };
+
+void Board::InitialState() {
+
+//generazione paziente zero: si generano due numeri casuali per darne le coordinate nella griglia people
+    std::random_device rd; // obtain a random number from hardware
+    std::mt19937 gen(rd()); // seed the generator
+    
+    std::uniform_int_distribution<> distr(0, rows_ - 1); //range righe
+    int row_0 = distr(gen); //generazione riga del paziente 0
+
+    std::uniform_int_distribution<> distr(0, columns_ - 1); //range colonne
+    int column_0 = distr(gen); //generazione colonna del paziente 0
+
+//riempimento griglia People con lo stato iniziale: tutti Susceptible tranne il paziente 0 che è Infected
+
+
+}

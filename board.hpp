@@ -17,15 +17,16 @@ class Person {
   // occhio perché non tutte le cellule hanno 8 viciniiiii
   // mancano attributi che sono le coordinate della cellula e metodi per
   // pescarle, direi che saranno tutti const
-  int counter[3];  // array con i conteggi di S, I, R che viene riempito da
+  int counter[3];  // array con i conteggi di S, I, R nel vicinato della cellula che viene riempito da
                    // Count
 
  public:
-  Person(State state, std::array<State, 8> neighborhood) : state_{state}, neighborhood_{neighborhood} {}
+  Person(State state, std::array<State, 8> neighborhood) : state_{state} {}
 
   State GetState() const;  // ritorna lo stato della persona
   int* Count();  // ritorna un puntatore perché l'array decade.
                            // Ritorna puntatore ad array 3-d, che è il counter.
+  //void SetCounter(); //Setta il vicinato della persona (il counter)
   void Update(double beta, double gamma);  // Aggiorna lo stato della cellula a ogni generazione
 };
 
@@ -36,17 +37,17 @@ class Board {
  const double beta_;
  const double gamma_;
  const int duration_; //durata totale della simulazione (in giorni)
- std::vector<std::vector<Person>> people_; //griglia di persone
+ std::vector<std::vector<Person>> people; //griglia di persone
  int totcounter[3]; //conta S, I ed R totali della griglia people_
  int time = 0; //tiene il conto del numero di giorni della simulazione, parte da 0. Ogni giorno è una generazione.
 
  public:
  Board(int rows, int columns, double beta, double gamma, int duration) : rows_{rows}, columns_{columns}, beta_{beta}, gamma_{gamma}, duration_{duration} {}
  int GetTime() const; //ritorna il numero della generazione in cui si trova la simulazione
- int SetTime(); //setta il contatore "time" aumentandolo di una unità a ogni generazione
+ void SetTime(); //setta il contatore "time" aumentandolo di una unità a ogni generazione
  void InitialState(); //genera lo stato iniziale della simulazione (riempie griglia e TotCounter con lo stato iniziale)
  void TotUpdate(); //fa evolvere lo stato di ciascuna persona della griglia e riempie TotCounter con il numero di S, I, R
- void Evolve(int time); //reitera TotUpdate tante volte quanto è time e a ogni iterazione aumenta "time" di una unità
+ void Evolve(); //reitera TotUpdate tante volte quanto è time e a ogni iterazione aumenta "time" di una unità
  void PrintTotCounter(); //stampa a schermo totcounter a ogni generazione
 
 };
