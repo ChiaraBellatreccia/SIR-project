@@ -11,22 +11,22 @@ class Person {
  private:
   State state_;  // ricorda di convertire esplicitamente quando assegni il
                  // valore S, I o R
-  std::array<State, 8> neighborhood_;  // array di int (che sarebbero gli enum convertiti) per il
+  //std::array<State, 8> neighborhood_;  // array di int (che sarebbero gli enum convertiti) per il
                       // vicinato della cellula. Magari quando capisci come si fa
                       // sostituisci con array di enum
   // occhio perché non tutte le cellule hanno 8 viciniiiii
   // mancano attributi che sono le coordinate della cellula e metodi per
   // pescarle, direi che saranno tutti const
-  int counter[3];  // array con i conteggi di S, I, R nel vicinato della cellula che viene riempito da
+  int counter[3];  // vettore con i conteggi di S, I, R nel vicinato della cellula che viene riempito da
                    // Count
 
  public:
-  Person(State state, std::array<State, 8> neighborhood) : state_{state} {}
+  Person(State state) : state_{state} {}
 
   State GetState() const;  // ritorna lo stato della persona
-  int* Count();  // ritorna un puntatore perché l'array decade.
+  //int* Count();  // ritorna un puntatore perché l'array decade.
                            // Ritorna puntatore ad array 3-d, che è il counter.
-  //void SetCounter(); //Setta il vicinato della persona (il counter)
+  void SetCounter(int S, int I, int R); //Setta il vicinato della persona (il counter)
   void Update(double beta, double gamma);  // Aggiorna lo stato della cellula a ogni generazione
 };
 

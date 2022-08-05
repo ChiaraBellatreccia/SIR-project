@@ -8,14 +8,14 @@
 
 State Person::GetState() const { return state_; };
 
-int* Person::Count() {
+/*int* Person::Count() {
 
   counter[0] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Susceptible);
   counter[1] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Infected);
   counter[2] = std::count(std::begin(neighborhood_), std::end(neighborhood_), State::Recovered);
 
   return counter;
-  };
+  };*/
 
 void Person::Update(double beta, double gamma) { 
 
@@ -51,6 +51,12 @@ void Person::Update(double beta, double gamma) {
     
     };
 
+void Person::SetCounter(int S, int I, int R) { //Setta il counter di ciascuna person
+    counter[0] = S;
+    counter[1] = I;
+    counter[2] = R;
+}
+
 int Board::GetTime() const { return time; };
 
 void Board::SetTime() { time += 1; };
@@ -61,11 +67,11 @@ void Board::InitialState() {
     std::random_device rd; // obtain a random number from hardware
     std::mt19937 gen(rd()); // seed the generator
     
-    std::uniform_int_distribution<> distr(0, rows_ - 1); //range righe
-    int row_0 = distr(gen); //generazione riga del paziente 0
+    std::uniform_int_distribution<> distr1(0, rows_ - 1); //range righe
+    int row_0 = distr1(gen); //generazione riga del paziente 0
 
-    std::uniform_int_distribution<> distr(0, columns_ - 1); //range colonne
-    int column_0 = distr(gen); //generazione colonna del paziente 0
+    std::uniform_int_distribution<> distr2(0, columns_ - 1); //range colonne
+    int column_0 = distr2(gen); //generazione colonna del paziente 0
 
 //riempimento griglia People con lo stato iniziale: tutti Susceptible tranne il paziente 0 che è Infected
 
