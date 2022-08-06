@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 
 enum class State : int { Susceptible, Infected, Recovered };
 
@@ -11,7 +12,7 @@ class Person {
  private:
   State state_;  // ricorda di convertire esplicitamente quando assegni il
                  // valore S, I o R
-  int counter[3];  // vettore con i conteggi di S, I, R nel vicinato della cellula che viene riempito da
+  int counter[3] {0, 0, 0};  // vettore con i conteggi di S, I, R nel vicinato della cellula che viene riempito da
                    // Count
 
  public:
@@ -24,6 +25,9 @@ class Person {
   // occhio perché non tutte le cellule hanno 8 viciniiiii
   // mancano attributi che sono le coordinate della cellula e metodi per
   // pescarle, direi che saranno tutti const
+  void PrintCounter() const {
+    std::cout << "Counter: " << "\n" << "S = " << counter[0] << "\n" << "I = " << counter[1] << "\n" << "R = " << counter[2] << "\n";
+  }
   State GetState() const;  // ritorna lo stato della persona
   void SetState(State state); //setta lo stato della persona
   void SetCounter();  // ritorna un puntatore perché l'array decade.
@@ -40,12 +44,14 @@ class Board {
  const double gamma_;
  const int duration_; //durata totale della simulazione (in giorni)
  std::vector<std::vector<Person>> people; //griglia di persone
- int totcounter[3]; //conta S, I ed R totali della griglia people_
+ int totcounter[3] {0, 0, 0}; //conta S, I ed R totali della griglia people_
  int time = 0; //tiene il conto del numero di giorni della simulazione, parte da 0. Ogni giorno è una generazione.
 
  public:
  Board(int rows, int columns, double beta, double gamma, int duration) : rows_{rows}, columns_{columns}, beta_{beta}, gamma_{gamma}, duration_{duration} {}
  int GetTime() const; //ritorna il numero della generazione in cui si trova la simulazione
+
+ State GetState(int i, int j) const; //ritorna lo stato della person ij
  void SetTime(); //setta il contatore "time" aumentandolo di una unità a ogni generazione
  void InitialState(); //genera lo stato iniziale della simulazione (riempie griglia e TotCounter con lo stato iniziale)
  void SetAllCounters(); //setta ciascuna counter di ciascuna person nella griglia riempiendo prima il vettore neighborhood di ciascuna persona
